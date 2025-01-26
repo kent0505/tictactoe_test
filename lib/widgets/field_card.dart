@@ -27,8 +27,8 @@ class FieldCard extends StatelessWidget {
           : null,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 400),
-        height: 112,
-        width: 112,
+        height: MediaQuery.of(context).size.width < 390 ? 80 : 110,
+        width: MediaQuery.of(context).size.width < 390 ? 80 : 110,
         margin: EdgeInsets.all(3),
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(

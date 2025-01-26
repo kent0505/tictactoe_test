@@ -39,6 +39,7 @@ class WinDialog extends StatelessWidget {
                 title.isEmpty
                     ? 'Congratulations! You won the set!'
                     : '$title won!',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xffFEFCFD),
                   fontSize: 16,
