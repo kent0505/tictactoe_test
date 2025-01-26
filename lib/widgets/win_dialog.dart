@@ -4,7 +4,9 @@ import 'main_button.dart';
 import 'svg_widget.dart';
 
 class WinDialog extends StatelessWidget {
-  const WinDialog({super.key});
+  const WinDialog({super.key, required this.title});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,7 @@ class WinDialog extends StatelessWidget {
         ),
         child: Container(
           height: 460,
+          // width: 330,
           padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             color: Color(0xff083697),
@@ -24,11 +27,13 @@ class WinDialog extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(height: 22),
+              SizedBox(height: 20),
               SvgWidget('assets/win.svg'),
-              SizedBox(height: 24),
+              Spacer(),
               Text(
-                'Congratulations! You won the set!',
+                title.isEmpty
+                    ? 'Congratulations! You won the set!'
+                    : '$title won!',
                 style: TextStyle(
                   color: Color(0xffFEFCFD),
                   fontSize: 16,
@@ -36,16 +41,17 @@ class WinDialog extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8),
-              Text(
-                'Your shot was perfect, and you’ve claimed victory in this set! Are you ready to continue the match and secure your win, or would you like to return to the home screen?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xff8793A8),
-                  fontSize: 14,
-                  fontFamily: 'w400',
+              if (title.isEmpty)
+                Text(
+                  'Your shot was perfect, and you’ve claimed victory in this set! Are you ready to continue the match and secure your win, or would you like to return to the home screen?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xff8793A8),
+                    fontSize: 14,
+                    fontFamily: 'w400',
+                  ),
                 ),
-              ),
-              SizedBox(height: 30),
+              Spacer(),
               MainButton(
                 title: 'Continue',
                 type: 1,
@@ -61,7 +67,7 @@ class WinDialog extends StatelessWidget {
                   Navigator.popUntil(context, (route) => route.isFirst);
                 },
               ),
-              SizedBox(height: 20),
+              Spacer(),
             ],
           ),
         ),

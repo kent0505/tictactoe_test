@@ -5,6 +5,7 @@ import '../widgets/custom_scaffold.dart';
 import '../widgets/main_button.dart';
 import '../widgets/svg_widget.dart';
 import 'game_screen.dart';
+import 'name_screen.dart';
 
 class ChooseSideScreen extends StatefulWidget {
   const ChooseSideScreen({super.key, required this.single});
@@ -109,18 +110,24 @@ class _ChooseSideScreenState extends State<ChooseSideScreen> {
             right: 16,
             bottom: 50,
             child: MainButton(
-              title: 'Start Game',
+              title: widget.single ? 'Start Game' : 'Next',
               type: 1,
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return GameScreen(
-                        single: widget.single,
-                        side1: side1,
-                        side2: side2,
-                      );
+                      return widget.single
+                          ? GameScreen(
+                              single: widget.single,
+                              side1: side1,
+                              side2: side2,
+                            )
+                          : NameScreen(
+                              single: widget.single,
+                              side1: side1,
+                              side2: side2,
+                            );
                     },
                   ),
                 );

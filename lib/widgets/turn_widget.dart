@@ -9,12 +9,16 @@ class TurnWidget extends StatelessWidget {
     required this.single,
     required this.side1,
     required this.side2,
+    required this.name1,
+    required this.name2,
   });
 
   final bool turn;
   final bool single;
   final int side1;
   final int side2;
+  final String name1;
+  final String name2;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class TurnWidget extends StatelessWidget {
         _Player(
           side: side1,
           turn: turn,
-          title: single ? 'Your turn' : 'Player 1',
+          title: single ? 'Your turn' : name1,
         ),
         Container(
           height: 138,
@@ -41,7 +45,7 @@ class TurnWidget extends StatelessWidget {
         _Player(
           side: side2,
           turn: !turn,
-          title: single ? 'Computer turn' : 'Player 2',
+          title: single ? 'Computer turn' : name2,
         ),
       ],
     );

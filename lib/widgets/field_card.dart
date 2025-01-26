@@ -25,7 +25,8 @@ class FieldCard extends StatelessWidget {
               onPressed(index);
             }
           : null,
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 400),
         height: 112,
         width: 112,
         margin: EdgeInsets.all(3),

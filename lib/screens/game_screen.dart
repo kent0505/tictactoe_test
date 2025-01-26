@@ -12,11 +12,15 @@ class GameScreen extends StatefulWidget {
     required this.single,
     required this.side1,
     required this.side2,
+    this.name1 = ' ',
+    this.name2 = 'Player 2',
   });
 
   final bool single;
   final int side1;
   final int side2;
+  final String name1;
+  final String name2;
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -73,7 +77,7 @@ class _GameScreenState extends State<GameScreen> {
         ids[value] = turn ? widget.side1 : widget.side2;
         canTap = false;
       });
-      print(ids);
+
       Future.delayed(
         Duration(milliseconds: 400),
         () {
@@ -83,7 +87,13 @@ class _GameScreenState extends State<GameScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return WinDialog();
+                  return WinDialog(
+                    title: widget.single
+                        ? ''
+                        : turn
+                            ? widget.name1
+                            : widget.name2,
+                  );
                 },
               ).then((value) {
                 reset();
@@ -91,32 +101,10 @@ class _GameScreenState extends State<GameScreen> {
             }
           } else {
             if (ids.contains(0)) {
-              if (widget.single) {
-                if (turn) {
-                  print('COMP');
-                  setState(() {
-                    for (int i = 0; i < ids.length; i++) {
-                      if (ids[i] == 0) {
-                        ids[i] = widget.side2;
-                        break;
-                      }
-                    }
-                    turn = true;
-                    canTap = true;
-                  });
-                } else {
-                  print('MY TURN');
-                  setState(() {
-                    turn = false;
-                    canTap = true;
-                  });
-                }
-              } else {
-                setState(() {
-                  turn = !turn;
-                  canTap = true;
-                });
-              }
+              if (widget.single) {}
+              turn = !turn;
+              canTap = true;
+              setState(() {});
             } else {
               stats3++;
               reset();
@@ -219,6 +207,8 @@ class _GameScreenState extends State<GameScreen> {
               single: widget.single,
               side1: widget.side1,
               side2: widget.side2,
+              name1: widget.name1,
+              name2: widget.name2,
             ),
           ],
         ),

@@ -48,7 +48,7 @@ class ExitDialog extends StatelessWidget {
             Container(
               height: 1,
               width: double.infinity,
-              color: Color(0xff808080).withValues(alpha: 55),
+              color: Color(0xff808080).withValues(alpha: .55),
             ),
             Row(
               children: [
@@ -73,7 +73,7 @@ class ExitDialog extends StatelessWidget {
                 Container(
                   height: 44,
                   width: 1,
-                  color: Color(0xff808080).withValues(alpha: 55),
+                  color: Color(0xff808080).withValues(alpha: .55),
                 ),
                 Expanded(
                   child: Button(

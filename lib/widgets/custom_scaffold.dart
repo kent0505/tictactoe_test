@@ -22,7 +22,7 @@ class CustomScaffold extends StatelessWidget {
         children: [
           Positioned(
             top: 32,
-            left: 85,
+            right: 220,
             child: Opacity(
               opacity: 0.2,
               child: SvgWidget('assets/bg2.svg'),
@@ -38,7 +38,7 @@ class CustomScaffold extends StatelessWidget {
           ),
           Positioned(
             top: 190,
-            right: -33,
+            right: -32,
             child: Opacity(
               opacity: 0.2,
               child: SvgWidget('assets/bg2.svg'),
