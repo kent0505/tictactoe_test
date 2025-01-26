@@ -4,9 +4,14 @@ import 'main_button.dart';
 import 'svg_widget.dart';
 
 class WinDialog extends StatelessWidget {
-  const WinDialog({super.key, required this.title});
+  const WinDialog({
+    super.key,
+    required this.title,
+    this.lose = false,
+  });
 
   final String title;
+  final bool lose;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class WinDialog extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 20),
-              SvgWidget('assets/win.svg'),
+              SvgWidget(lose ? 'assets/lose.svg' : 'assets/win.svg'),
               Spacer(),
               Text(
                 title.isEmpty

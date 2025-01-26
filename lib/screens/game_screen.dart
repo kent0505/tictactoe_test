@@ -12,7 +12,7 @@ class GameScreen extends StatefulWidget {
     required this.single,
     required this.side1,
     required this.side2,
-    this.name1 = ' ',
+    this.name1 = 'Player 1',
     this.name2 = 'Player 2',
   });
 
@@ -42,12 +42,12 @@ class _GameScreenState extends State<GameScreen> {
   int stats1 = 0;
   int stats2 = 0;
   int stats3 = 0;
+  int? previousIndex;
 
   bool turn = true;
   bool canTap = true;
 
-  bool getWin() {
-    int x = turn ? widget.side1 : widget.side2;
+  bool getWin(int x) {
     return winningCombos.any((combo) {
       return ids[combo[0]] == x && ids[combo[1]] == x && ids[combo[2]] == x;
     });
@@ -71,17 +71,31 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  void onReset() {
+    if (previousIndex != null) {
+      setState(() {
+        ids[previousIndex!] = 0;
+        turn = !turn;
+        previousIndex = null;
+      });
+    }
+  }
+
   void onField(int value) {
+    int x = widget.side1;
+    int y = widget.side2;
     if (canTap) {
       setState(() {
-        ids[value] = turn ? widget.side1 : widget.side2;
+        ids[value] = turn ? x : y;
+        previousIndex = value;
         canTap = false;
       });
 
       Future.delayed(
         Duration(milliseconds: 400),
         () {
-          if (getWin()) {
+          if (getWin(turn ? widget.side1 : widget.side2)) {
+            previousIndex = null;
             turn ? stats1++ : stats2++;
             if (mounted) {
               showDialog(
@@ -101,8 +115,85 @@ class _GameScreenState extends State<GameScreen> {
             }
           } else {
             if (ids.contains(0)) {
-              if (widget.single) {}
-              turn = !turn;
+              if (widget.single) {
+                if (ids[0] == x && ids[1] == x && ids[2] == 0) {
+                  ids[2] = y;
+                } else if (ids[3] == x && ids[4] == x && ids[5] == 0) {
+                  ids[5] = y;
+                } else if (ids[6] == x && ids[7] == x && ids[8] == 0) {
+                  ids[8] = y;
+                } else if (ids[2] == x && ids[1] == x && ids[0] == 0) {
+                  ids[0] = y;
+                } else if (ids[5] == x && ids[4] == x && ids[3] == 0) {
+                  ids[3] = y;
+                } else if (ids[8] == x && ids[7] == x && ids[6] == 0) {
+                  ids[6] = y;
+                } else if (ids[0] == x && ids[3] == x && ids[6] == 0) {
+                  ids[6] = y;
+                } else if (ids[1] == x && ids[4] == x && ids[7] == 0) {
+                  ids[7] = y;
+                } else if (ids[2] == x && ids[5] == x && ids[8] == 0) {
+                  ids[8] = y;
+                } else if (ids[6] == x && ids[3] == x && ids[0] == 0) {
+                  ids[0] = y;
+                } else if (ids[7] == x && ids[4] == x && ids[1] == 0) {
+                  ids[1] = y;
+                } else if (ids[8] == x && ids[5] == x && ids[2] == 0) {
+                  ids[2] = y;
+                } else if (ids[0] == x && ids[4] == x && ids[8] == 0) {
+                  ids[8] = y;
+                } else if (ids[2] == x && ids[4] == x && ids[6] == 0) {
+                  ids[6] = y;
+                } else if (ids[6] == x && ids[4] == x && ids[2] == 0) {
+                  ids[2] = y;
+                } else if (ids[8] == x && ids[4] == x && ids[0] == 0) {
+                  ids[0] = y;
+                } else if (ids[0] == x && ids[2] == x && ids[1] == 0) {
+                  ids[1] = y;
+                } else if (ids[0] == x && ids[6] == x && ids[3] == 0) {
+                  ids[3] = y;
+                } else if (ids[2] == x && ids[8] == x && ids[5] == 0) {
+                  ids[5] = y;
+                } else if (ids[8] == x && ids[6] == x && ids[7] == 0) {
+                  ids[7] = y;
+                } else if (ids[4] == 0) {
+                  ids[4] = y;
+                } else {
+                  for (int i = 0; i < ids.length; i++) {
+                    if (ids[i] == 0) {
+                      ids[i] = y;
+                      break;
+                    }
+                  }
+                }
+                if (getWin(turn ? widget.side2 : widget.side1)) {
+                  turn = false;
+                  previousIndex = null;
+                  stats2++;
+                  Future.delayed(
+                    Duration(milliseconds: 400),
+                    () {
+                      if (mounted) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return WinDialog(
+                              title: 'Computer',
+                              lose: true,
+                            );
+                          },
+                        ).then((value) {
+                          reset();
+                        });
+                      }
+                    },
+                  );
+                } else {
+                  turn = true;
+                }
+              } else {
+                turn = !turn;
+              }
               canTap = true;
               setState(() {});
             } else {
@@ -121,6 +212,7 @@ class _GameScreenState extends State<GameScreen> {
       canPop: stats1 == 0 && stats2 == 0 && stats3 == 0,
       child: CustomScaffold(
         exit: stats1 != 0 || stats2 != 0 || stats3 != 0,
+        onReset: widget.single ? null : onReset,
         body: Column(
           children: [
             SizedBox(height: 76 + MediaQuery.of(context).viewPadding.top),

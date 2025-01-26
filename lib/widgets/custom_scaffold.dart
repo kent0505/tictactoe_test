@@ -9,14 +9,17 @@ class CustomScaffold extends StatelessWidget {
     super.key,
     required this.body,
     this.exit = false,
+    this.onReset,
   });
 
   final Widget body;
   final bool exit;
+  final void Function()? onReset;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -92,6 +95,15 @@ class CustomScaffold extends StatelessWidget {
               child: SvgWidget('assets/back.svg'),
             ),
           ),
+          if (onReset != null)
+            Positioned(
+              top: 16 + MediaQuery.of(context).viewPadding.top,
+              right: 16,
+              child: Button(
+                onPressed: onReset,
+                child: SvgWidget('assets/res.svg'),
+              ),
+            ),
         ],
       ),
     );
