@@ -69,8 +69,8 @@ class _Player extends StatelessWidget {
       children: [
         AnimatedContainer(
           duration: Duration(milliseconds: 400),
-          height: 138,
-          width: 138,
+          height: MediaQuery.of(context).size.width < 390 ? 120 : 138,
+          width: MediaQuery.of(context).size.width < 390 ? 120 : 138,
           decoration: BoxDecoration(
             color: Color(0xff204AA1),
             borderRadius: BorderRadius.circular(16),

@@ -67,7 +67,6 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void reset() async {
-    await Future.delayed(Duration(milliseconds: 400));
     setState(() {
       previousIndex = null;
       turn = true;
@@ -107,8 +106,8 @@ class _GameScreenState extends State<GameScreen> {
               title: widget.single
                   ? ''
                   : turn
-                      ? widget.name1
-                      : widget.name2,
+                      ? widget.name2
+                      : widget.name1,
             );
           },
         ).then((value) {
