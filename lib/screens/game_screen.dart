@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../logic/utils.dart';
 import '../widgets/custom_scaffold.dart';
 import '../widgets/field_card.dart';
 import '../widgets/stats_card.dart';
@@ -56,7 +57,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   bool getGreen(int id) {
-    int z = turn ? x : y;
+    int z = turn ? y : x;
     return winningCombos.any((combo) {
       return combo.contains(id) &&
           ids[combo[0]] == z &&
@@ -65,8 +66,10 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  void reset() {
+  void reset() async {
+    await Future.delayed(Duration(milliseconds: 400));
     setState(() {
+      previousIndex = null;
       turn = true;
       canTap = true;
       ids = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -83,14 +86,19 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  void onField(int value) {
+  void onField(int value) async {
+    if (!canTap) return;
     ids[value] = turn ? x : y;
     previousIndex = value;
     canTap = false;
     turn = !turn;
-    if (getWin(turn ? x : y)) {
-      previousIndex = null;
-      turn ? stats1++ : stats2++;
+    setState(() {});
+
+    await Future.delayed(Duration(milliseconds: 400));
+
+    if (getWin(turn ? y : x)) {
+      // PLAYER WIN
+      turn ? stats2++ : stats1++;
       if (mounted) {
         showDialog(
           context: context,
@@ -110,61 +118,13 @@ class _GameScreenState extends State<GameScreen> {
     } else {
       if (ids.contains(0)) {
         if (widget.single) {
-          if (ids[0] == x && ids[1] == x && ids[2] == 0) {
-            ids[2] = y;
-          } else if (ids[3] == x && ids[4] == x && ids[5] == 0) {
-            ids[5] = y;
-          } else if (ids[6] == x && ids[7] == x && ids[8] == 0) {
-            ids[8] = y;
-          } else if (ids[2] == x && ids[1] == x && ids[0] == 0) {
-            ids[0] = y;
-          } else if (ids[5] == x && ids[4] == x && ids[3] == 0) {
-            ids[3] = y;
-          } else if (ids[8] == x && ids[7] == x && ids[6] == 0) {
-            ids[6] = y;
-          } else if (ids[0] == x && ids[3] == x && ids[6] == 0) {
-            ids[6] = y;
-          } else if (ids[1] == x && ids[4] == x && ids[7] == 0) {
-            ids[7] = y;
-          } else if (ids[2] == x && ids[5] == x && ids[8] == 0) {
-            ids[8] = y;
-          } else if (ids[6] == x && ids[3] == x && ids[0] == 0) {
-            ids[0] = y;
-          } else if (ids[7] == x && ids[4] == x && ids[1] == 0) {
-            ids[1] = y;
-          } else if (ids[8] == x && ids[5] == x && ids[2] == 0) {
-            ids[2] = y;
-          } else if (ids[0] == x && ids[4] == x && ids[8] == 0) {
-            ids[8] = y;
-          } else if (ids[2] == x && ids[4] == x && ids[6] == 0) {
-            ids[6] = y;
-          } else if (ids[6] == x && ids[4] == x && ids[2] == 0) {
-            ids[2] = y;
-          } else if (ids[8] == x && ids[4] == x && ids[0] == 0) {
-            ids[0] = y;
-          } else if (ids[0] == x && ids[2] == x && ids[1] == 0) {
-            ids[1] = y;
-          } else if (ids[0] == x && ids[6] == x && ids[3] == 0) {
-            ids[3] = y;
-          } else if (ids[2] == x && ids[8] == x && ids[5] == 0) {
-            ids[5] = y;
-          } else if (ids[8] == x && ids[6] == x && ids[7] == 0) {
-            ids[7] = y;
-          } else if (ids[4] == 0) {
-            ids[4] = y;
-          } else {
-            for (int i = 0; i < ids.length; i++) {
-              if (ids[i] == 0) {
-                ids[i] = y;
-                break;
-              }
-            }
-          }
-          turn = !turn;
-
-          if (getWin(turn ? widget.side2 : widget.side1)) {
-            previousIndex = null;
-            stats2++;
+          await Future.delayed(Duration(milliseconds: 400));
+          ids[getY(ids, x)] = y; // COMPUTER SELECTS
+          turn = true;
+          setState(() {});
+          await Future.delayed(Duration(milliseconds: 400));
+          if (getWin(turn ? y : x)) {
+            // COMPUTER WIN
             if (mounted) {
               showDialog(
                 context: context,
@@ -175,6 +135,7 @@ class _GameScreenState extends State<GameScreen> {
                   );
                 },
               ).then((value) {
+                stats2++;
                 reset();
               });
             }
@@ -183,6 +144,7 @@ class _GameScreenState extends State<GameScreen> {
         canTap = true;
         setState(() {});
       } else {
+        // DRAFT
         stats3++;
         reset();
       }
